@@ -1,0 +1,5 @@
+package com.trip.ai.model;
+
+public class PlaceDTO {
+
+}
