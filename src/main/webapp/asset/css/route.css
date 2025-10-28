@@ -57,20 +57,8 @@ main.route-choice-container h2 {
   notice.css의 main 스타일과 충돌하지 않도록,
   기존 margin과 padding을 초기화하고 중앙 정렬을 다시 적용합니다.
 */
-main.ai-plan-main-container {
-    /* 1. notice.css의 스타일 초기화 */
-    margin: 0;
-    max-width: 100%; /* 너비 제한 해제 */
 
-    /* 2. 중앙 정렬 재적용 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 70px); /* 헤더 높이를 제외한 나머지 공간 */
-    padding: 40px 20px; /* 내부 여백 다시 설정 */
-    box-sizing: border-box; /* 패딩을 높이에 포함시켜 스크롤바 방지 */
-}
+
 
 #ai-plan-container {
     width: 100%;

@@ -14,10 +14,20 @@ import com.trip.ai.model.RouteDTO;
 
 /**
  * AI 추천 결과 페이지(result.jsp)를 보여주는 서블릿입니다.
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
  */
 @WebServlet("/ai/result.do")
 public class ResultController extends HttpServlet {
 
+	/**
+	 * AI 추천 결과 페이지로 리다이렉트하거나, 세션에 데이터가 없을 경우 계획 페이지로 이동합니다.
+	 * @param req HttpServletRequest 객체
+	 * @param resp HttpServletResponse 객체
+	 * @throws ServletException 서블릿 예외
+	 * @throws IOException 입출력 예외
+	 */
 	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         

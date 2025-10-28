@@ -12,11 +12,27 @@ import javax.servlet.http.HttpSession;
 import com.trip.member.model.UserDTO;
 import com.trip.member.service.UserService;
 
+/**
+ * AI 기반 여행 계획 페이지를 담당하는 서블릿
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 @WebServlet("/ai/plan.do")
 public class AiPlanController extends HttpServlet {
 	
+	/**
+	 * 사용자 서비스 객체
+	 */
 	private final UserService userService = new UserService();
 	
+    /**
+     * AI 여행 계획 페이지를 로드하고, 로그인된 사용자 정보를 전달합니다.
+     * @param req HttpServletRequest 객체
+     * @param resp HttpServletResponse 객체
+     * @throws ServletException 서블릿 예외
+     * @throws IOException 입출력 예외
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	
@@ -26,12 +42,9 @@ public class AiPlanController extends HttpServlet {
 	    	HttpSession session = req.getSession();
 	    	String userId = (String) session.getAttribute("id");
 	    	
-	    	//2. 로그인 상태인 경우, DB에서 회원 정보를 조회
 	    	if (userId != null) {
-	    		UserDTO user = userService.getAttribute("id");
-	    		
-	    		//3. JSP로 데이터를 전달하기 위해 request 객체에 "userInfo" 라는 이름으로 저장
-	    		req.setAttribute("userInfo", user);
+	    	    UserDTO user = (UserDTO) session.getAttribute("user"); // 세션에서 UserDTO 꺼내기
+	    	    req.setAttribute("userInfo", user);
 	    	}
 	    	
 	    	//4. jsp로 화면 전환

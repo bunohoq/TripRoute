@@ -15,12 +15,32 @@ import com.trip.ai.model.RouteDTO;
 import com.trip.ai.model.TripPreferencesDTO;
 import com.trip.ai.service.AiService;
 
+/**
+ * AI 기반 여행 경로 생성을 처리하는 서블릿
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 @WebServlet(value = "/ai/generate.do")
 public class GenerateRouteController extends HttpServlet {
 
+	/**
+	 * AI 서비스 객체
+	 */
 	private final AiService aiService = new AiService();
+	/**
+	 * JSON 직렬화/역직렬화를 위한 Gson 객체
+	 */	
 	private final Gson gson = new Gson();
 	
+	/**
+	 * AI 여행 경로 생성 요청을 처리합니다.
+	 * 클라이언트로부터 여행 선호도 데이터를 받아 AI 서비스를 통해 경로를 생성하고 저장합니다.
+	 * @param req HttpServletRequest 객체
+	 * @param resp HttpServletResponse 객체
+	 * @throws ServletException 서블릿 예외
+	 * @throws IOException 입출력 예외
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

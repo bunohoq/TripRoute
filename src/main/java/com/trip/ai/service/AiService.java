@@ -14,22 +14,52 @@ import com.trip.ai.model.AiDAO;
 import com.trip.ai.model.RouteDTO;
 import com.trip.ai.model.TripPreferencesDTO;
 
+/**
+ * AI 기반 여행 경로 생성 및 관련 기능을 제공하는 서비스 클래스
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 public class AiService {
 
     // API URL 및 모델 정보
+    /**
+     * Gemini API의 기본 URL
+     */
     private static final String API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
+    /**
+     * 사용할 Gemini 모델의 이름
+     */
     private static final String MODEL_NAME = "gemini-2.5-flash"; // 안정적인 모델 이름
+    /**
+     * API 호출 액션
+     */
     private static final String ACTION = ":generateContent";
 
     // API 키 (환경 변수에서 가져오기)
+    /**
+     * Gemini API 인증 키
+     */
     private static final String API_KEY = System.getenv("GEMINI_API_KEY");
     
     // JSON 변환을 위한 Gson 객체
+    /**
+     * JSON 직렬화/역직렬화를 위한 Gson 객체
+     */
     private final Gson gson = new Gson();
     
     // 최신 방식의 HttpClient (애플리케이션에서 한 번만 생성하여 재사용)
+    /**
+     * HTTP 요청을 위한 HttpClient 객체
+     */
     private final HttpClient client = HttpClient.newHttpClient();
 
+    /**
+     * 사용자 선호도에 기반하여 AI 여행 경로를 생성합니다.
+     * Gemini API를 호출하여 여행 계획을 요청하고, 응답을 RouteDTO 객체로 변환합니다.
+     * @param preferences 사용자 여행 선호도 정보를 담은 TripPreferencesDTO 객체
+     * @return AI가 생성한 여행 경로 정보를 담은 RouteDTO 객체
+     */
     public RouteDTO createAiRoute(TripPreferencesDTO preferences) {
         try {
             if (API_KEY == null || API_KEY.isEmpty()) {
@@ -99,6 +129,13 @@ public class AiService {
         }
     }
     
+    /**
+     * AI가 생성한 여행 경로를 데이터베이스에 저장합니다.
+     * @param route 저장할 여행 경로 정보를 담은 RouteDTO 객체
+     * @param userId 사용자 ID
+     * @param conversationId 대화 ID
+     * @return 저장된 여행 경로 정보를 담은 RouteDTO 객체
+     */
     public RouteDTO saveAiRoute(RouteDTO route, String userId, Long conversationId) {
         AiDAO dao = new AiDAO();
         return dao.saveAiRoute(route, userId, conversationId);
@@ -109,12 +146,23 @@ public class AiService {
      * 이 메서드를 호출하려면 먼저 AiDAO의 saveConversationAndAnswers 메서드 내부를
      * 실제 DB 데이터와 연동하는 로직으로 구현해야 합니다.
     */
+    /**
+     * 사용자 질문과 답변을 데이터베이스에 저장합니다.
+     * @param preferences 여행 선호도 정보를 담은 TripPreferencesDTO 객체
+     * @param userId 사용자 ID
+     * @return 저장된 대화 ID
+     */
     public Long saveConversationAndAnswers(TripPreferencesDTO preferences, String userId) {
         AiDAO dao = new AiDAO();
         // return dao.saveConversationAndAnswers(preferences, userId);
         return null; // 임시로 null 반환
     }
 
+    /**
+     * TripPreferencesDTO 객체를 바탕으로 AI 모델에 전달할 프롬프트를 생성합니다.
+     * @param dto 사용자 여행 선호도 정보를 담은 TripPreferencesDTO 객체
+     * @return AI 모델용 프롬프트 문자열
+     */
     private String buildPrompt(TripPreferencesDTO dto) {
         StringBuilder prompt = new StringBuilder();
 

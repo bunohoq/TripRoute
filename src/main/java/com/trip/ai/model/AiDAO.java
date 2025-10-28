@@ -6,11 +6,28 @@ import java.sql.ResultSet;
 
 import com.test.util.DBUtil;
 
+/**
+ * AI 관련 데이터베이스 작업을 처리하는 DAO 클래스
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 public class AiDAO {
 
     // AiDAO 생성 시마다 커넥션을 열지 않도록 수정
+    /**
+     * AiDAO 객체를 생성합니다.
+     */
     public AiDAO() { }
 
+    /**
+     * AI가 생성한 여행 경로를 데이터베이스에 저장합니다.
+     * 트랜잭션 내에서 tblAiRoute(부모)와 tblAiRouteStop(자식) 테이블에 데이터를 삽입합니다.
+     * @param route 저장할 여행 경로 정보(경유지 포함)가 담긴 RouteDTO 객체
+     * @param userId 사용자 ID
+     * @param conversationId 대화 ID (선택 사항, null 가능)
+     * @return 저장된 여행 경로 정보 (DB에서 생성된 ai_route_id, ai_route_stop_id가 DTO에 반영됨)
+     */
     public RouteDTO saveAiRoute(RouteDTO route, String userId, Long conversationId) {
         
         // 각 메서드 내에서 커넥션을 열고 닫는 것이 더 안정적입니다.
@@ -93,6 +110,15 @@ public class AiDAO {
         return route;
     }
     
+    /**
+     * 헬스케어 로그(tblHealthCareLog)를 데이터베이스에 저장합니다.
+     * 경유지(Stop)의 활동 코드(activity_code)를 기반으로 METS 값을 계산하고 칼로리 소모량을 추정하여 저장합니다.
+     *
+     * @param stop 경유지 정보 (활동 코드, 소요 시간, 거리, 걸음 수 등 포함)
+     * @param userId 사용자 ID
+     * @param userWeight 사용자 체중 (칼로리 계산용)
+     * @param startDate 여행 시작일 (YYYY-MM-DD), 날짜 계산 기준
+     */
     public void saveHealthCareLog(RouteStopDTO stop, String userId, double userWeight, String startDate) {
         
         double mets = 0;
@@ -129,7 +155,12 @@ public class AiDAO {
         }
     }
     
-    // 사용자 질문 저장 기능 (다음 단계에서 구현)
+    /**
+     * 사용자 질문(선호도)과 답변을 데이터베이스에 저장합니다. (향후 구현 예정)
+     * @param preferences 여행 선호도 정보가 담긴 DTO
+     * @param userId 사용자 ID
+     * @return 저장된 대화 ID (conversation_id)
+     */
     public Long saveConversationAndAnswers(TripPreferencesDTO preferences, String userId) {
         return null;
     }

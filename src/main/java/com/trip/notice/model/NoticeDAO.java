@@ -9,6 +9,12 @@ import java.util.Map;
 
 import com.test.util.DBUtil;
 
+/**
+ * 공지사항 관련 데이터베이스 작업을 처리하는 DAO 클래스
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 public class NoticeDAO {
 
 	private DBUtil util;
@@ -17,6 +23,11 @@ public class NoticeDAO {
 	private PreparedStatement pstat;
 	private ResultSet rs;
 
+	/**
+	 * NoticeDAO의 생성자입니다.
+	 * 데이터베이스 연결을 초기화하고 Statement 객체를 생성합니다.
+	 * DB 연결 중 오류 발생 시 스택 트레이스를 출력합니다.
+	 */
 	public NoticeDAO() {
 		try {
 			util = new DBUtil();
@@ -27,6 +38,11 @@ public class NoticeDAO {
 		}
 	}
 
+	/**
+	 * 공지사항 목록을 조회합니다. 검색 조건과 페이징 정보를 사용하여 데이터베이스에서 공지사항 목록을 가져옵니다.
+	 * @param map 검색 조건(column, word) 및 페이징 정보(begin, end)를 담고 있는 Map 객체
+	 * @return 조회된 NoticeDTO 객체들의 ArrayList. 오류 발생 시 null 반환.
+	 */
 	public ArrayList<NoticeDTO> getList(Map<String, String> map) {
 		ArrayList<NoticeDTO> list = new ArrayList<NoticeDTO>();
 		try {
@@ -77,6 +93,11 @@ public class NoticeDAO {
 		return null;
 	}
 
+	/**
+	 * 검색 조건에 해당하는 전체 공지사항의 개수를 조회합니다.
+	 * @param map 검색 조건(column, word)을 담고 있는 Map 객체
+	 * @return 검색 조건에 맞는 공지사항의 총 개수. 오류 발생 시 0 반환.
+	 */
 	public int getTotalCount(Map<String, String> map) {
 		
 		try {

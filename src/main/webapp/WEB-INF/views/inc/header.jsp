@@ -51,7 +51,7 @@
             <div class="user-info">
                 <c:choose>
                     <%-- 로그인 상태가 아닐 때 --%>
-                    <c:when test="${empty id}">
+                    <c:when test="${empty user}">
                         <a href="${pageContext.request.contextPath}/user/login.do" class="btn-login">로그인</a>
                         <a href="${pageContext.request.contextPath}/user/register.do" class="btn-login">회원가입</a>
                     </c:when>
@@ -81,16 +81,40 @@
             <i class="fa-solid fa-times"></i>
         </button>
     </div>
+
+    <%-- ✅ [수정] 모바일 내비게이션 링크에 드롭다운 구조 추가 --%>
     <nav class="mobile-nav-links">
-        <a href="#">여행정보</a>
-        <a href="${pageContext.request.contextPath}/route/mainroute.do">여행루트</a>
-        <a href="#">게시판</a>
-        <a href="${pageContext.request.contextPath}/list.do">공지사항</a>
+        <%-- 여행정보 드롭다운 --%>
+        <div class="mobile-nav-item has-dropdown">
+            <a href="#" class="dropdown-toggle">여행정보 <i class="fa-solid fa-chevron-down dropdown-arrow"></i></a>
+            <div class="mobile-sub-menu">
+                <a href="${pageContext.request.contextPath}/allplace/map.do">관광지 지도</a>
+                <a href="${pageContext.request.contextPath}/info/trend/trend.do">여행트렌드</a>
+                <a href="#">여행지 뉴스</a>
+                <a href="#">날씨/공기질</a>
+                <a href="#">시기별 축제/행사</a>
+            </div>
+        </div>
+        <%-- 여행루트 (단일 링크) --%>
+        <a href="${pageContext.request.contextPath}/route/mainroute.do" class="mobile-nav-item">여행루트</a>
+        <%-- 게시판 드롭다운 --%>
+        <div class="mobile-nav-item has-dropdown">
+            <a href="#" class="dropdown-toggle">게시판 <i class="fa-solid fa-chevron-down dropdown-arrow"></i></a>
+            <div class="mobile-sub-menu">
+                <a href="${pageContext.request.contextPath}/routepost/list.do">여행 루트 추천</a>
+                <a href="${pageContext.request.contextPath}/reviewboard/list.do">여행 후기</a>
+                <a href="${pageContext.request.contextPath}/qna/list.do">Q&A</a>
+                <a href="${pageContext.request.contextPath}/findboard/list.do">동행 찾기</a>
+                <a href="${pageContext.request.contextPath}/board/list.do">여행 용품</a>
+            </div>
+        </div>
+        <%-- 공지사항 (단일 링크) --%>
+        <a href="${pageContext.request.contextPath}/list.do" class="mobile-nav-item">공지사항</a>
     </nav>
     <div class="menu-footer">
         <a href="#" class="icon-link" aria-label="검색"><i class="fa-solid fa-magnifying-glass"></i></a>
         <c:choose>
-            <c:when test="${not empty id}">
+            <c:when test="${not empty user}">
                 <a href="${pageContext.request.contextPath}/user/mypage.do" class="icon-link profile-link" aria-label="내 프로필"><i class="fa-solid fa-user"></i></a>
             </c:when>
             <c:otherwise>

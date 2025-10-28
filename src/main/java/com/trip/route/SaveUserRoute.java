@@ -19,9 +19,35 @@ import org.json.simple.JSONObject;
 import com.test.util.DBUtil;
 import com.trip.member.model.UserDTO;
 
+/**
+ * AI가 생성한 경로를 사용자 경로로 저장하는 서블릿
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 @WebServlet("/route/saveUserRoute.do")
 public class SaveUserRoute extends HttpServlet {
 
+    /**
+     * HTTP POST 요청을 처리합니다.
+     * AI 추천 경로(AI Route)를 현재 로그인한 사용자의 경로(User Route)로 복사하여 저장합니다.
+     * 이 작업은 트랜잭션으로 처리됩니다.
+     * <p>
+     * 1. 세션에서 로그인한 사용자 정보를 확인합니다.
+     * 2. 요청 파라미터에서 원본이 될 `aiRouteId`를 받습니다.
+     * 3. 트랜잭션을 시작합니다.
+     * 4. `tblAiRoute`에서 원본 경로 마스터 정보를 조회합니다.
+     * 5. `tblUserRoute`에 사용자 ID와 원본 정보를 포함하여 새 레코드를 삽입하고, 새로 생성된 `user_route_id`를 가져옵니다.
+     * 6. `tblAiRouteStop`에서 원본 경로의 모든 경유지(stop) 목록을 조회합니다.
+     * 7. 조회된 경유지 목록을 `tblUserRouteStop`에 새로 생성된 `user_route_id`와 함께 일괄 삽입(Batch Update)합니다.
+     * 8. 모든 작업이 성공하면 commit하고, 실패하면 rollback합니다.
+     * 9. 처리 결과를 JSON 형태로 클라이언트에 응답합니다.
+     *
+     * @param req  클라이언트가 서블릿에 보낸 HttpServletRequest 객체
+     * @param resp 서블릿이 클라이언트에 보내는 HttpServletResponse 객체
+     * @throws ServletException 서블릿 처리 중 예외 발생 시
+     * @throws IOException      요청 또는 응답 처리 중 I/O 예외 발생 시
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         

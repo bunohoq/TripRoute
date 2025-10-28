@@ -21,9 +21,36 @@ import org.json.simple.parser.JSONParser;
 import com.test.util.DBUtil;
 import com.trip.member.model.UserDTO;
 
+/**
+ * 사용자 정의 경로의 순서를 업데이트하는 서블릿
+ * @author jsg
+ * @version 1.0
+ * @since 2025.10.24
+ */
 @WebServlet("/route/updateUserRouteOrder.do")
 public class UpdateUserRouteOrder extends HttpServlet {
 
+    /**
+     * HTTP POST 요청을 처리합니다.
+     * 클라이언트(JSP)에서 드래그앤드롭 등으로 변경된 경로의 순서 정보를 JSON 형태로 받아
+     * 데이터베이스에 일괄 업데이트(Batch Update)합니다. 이 작업은 트랜잭션으로 처리됩니다.
+     * <p>
+     * 1. 세션에서 로그인한 사용자 정보를 확인합니다.
+     * 2. 요청 본문(body)에서 JSON 데이터를 읽어옵니다.
+     * (JSON 형식: { userRouteId: 123, updatedDays: { "1": [stopId1, stopId2], "2": [stopId3] } })
+     * 3. 트랜잭션을 시작합니다.
+     * 4. (보안 TODO: 해당 `userRouteId`가 로그인한 사용자의 소유인지 확인해야 함)
+     * 5. `updatedDays` 객체를 순회하며 각 경유지(stop)의 `user_route_day`와 `user_route_stop_order`를
+     * `tblUserRouteStop` 테이블에 업데이트하는 SQL을 배치(batch)에 추가합니다.
+     * 6. `executeBatch()`를 실행하여 모든 변경 사항을 한 번에 적용합니다.
+     * 7. 모든 작업이 성공하면 commit하고, 실패하면 rollback합니다.
+     * 8. 처리 결과를 JSON 형태로 클라이언트에 응답합니다.
+     *
+     * @param req  클라이언트가 서블릿에 보낸 HttpServletRequest 객체
+     * @param resp 서블릿이 클라이언트에 보내는 HttpServletResponse 객체
+     * @throws ServletException 서블릿 처리 중 예외 발생 시
+     * @throws IOException      요청 또는 응답 처리 중 I/O 예외 발생 시
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
